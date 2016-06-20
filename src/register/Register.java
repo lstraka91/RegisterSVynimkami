@@ -1,9 +1,11 @@
 package register;
 
+import java.io.IOException;
+
 import register.exception.BadIndexException;
 import register.exception.DuplicationException;
 
-public interface Register {
+public interface Register  {
 
 	/**
 	 * Returns the number of persons in this register.
@@ -67,5 +69,9 @@ public interface Register {
 	void removeAllBy(char firstLetter);
 	
 	void sortRegisterByName();
+	
+	void save() throws IOException;
+	
+	void load();
 
 }

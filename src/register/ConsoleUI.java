@@ -3,6 +3,7 @@ package register;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.sql.Savepoint;
 
 import register.exception.*;
 
@@ -46,6 +47,7 @@ public class ConsoleUI {
 	}
 
 	public void run() {
+		register.load();
 		while (true) {
 			switch (showMenu()) {
 			case PRINT:

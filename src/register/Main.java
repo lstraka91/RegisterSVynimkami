@@ -5,14 +5,14 @@ package register;
  */
 public class Main {
 
-    public static void main(String[] args) throws Exception {
-//        Register register = new ArrayRegister(20);
-        Register register = new ListRegister(20);
+	public static void main(String[] args) throws Exception {
+		// Register register = new ArrayRegister(20);
+		Register register = new ListRegister(20);
+		register.load();
+//		register.addPerson(new Person("Janko Hrasko", "0900123456"));
 
-        register.addPerson(new Person("Janko Hrasko", "0900123456"));
+		ConsoleUI ui = new ConsoleUI(register);
 
-        ConsoleUI ui = new ConsoleUI(register);
-        
-        ui.run();
-    }
+		ui.run();
+	}
 }

@@ -1,12 +1,14 @@
 package register;
 
+import java.io.Serializable;
+
 import register.exception.BadIndexException;
 import register.exception.DuplicationException;
 
 /**
  * register.Person register.
  */
-public class ArrayRegister implements Register {
+public class ArrayRegister implements Register, Serializable {
 	/** register.Person array. */
 	private Person[] persons;
 
@@ -149,6 +151,18 @@ public class ArrayRegister implements Register {
 
 	@Override
 	public void removeAllBy(char firstLetter) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void save() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void load() {
 		// TODO Auto-generated method stub
 		
 	}

@@ -1,11 +1,13 @@
 package register;
 
+import java.io.Serializable;
+
 import register.exception.*;
 
 /**
  * register.Person.
  */
-public class Person implements Comparable<Person> {
+public class Person implements Comparable<Person>,Serializable {
 	/** Name of this person. */
 	private String name;
 
