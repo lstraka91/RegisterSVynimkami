@@ -62,7 +62,11 @@ public class ConsoleUI {
 				addToRegister();
 				break;
 			case UPDATE:
-				updateRegister();
+				if (register instanceof DatabaseRegister) {
+					updateDatabaseRegister();
+				} else {
+					updateRegister();
+				}
 				break;
 			case REMOVE:
 				removeFromRegister();
@@ -181,11 +185,11 @@ public class ConsoleUI {
 			System.out.println("Index Name (Phone Number)");
 		System.out.println("-----------------------------------------------");
 
-		int i = 1;
-		while (i <= registerLength) {
+		int i = 0;
+		while (i < registerLength) {
 
 			try {
-				System.out.printf("%4d. %s%n", i, register.getPerson(i));
+				System.out.printf("%4d. %s%n", i+1, register.getPerson(i));
 				i++;
 			} catch (BadIndexException e) {
 				e.printStackTrace();
@@ -250,8 +254,10 @@ public class ConsoleUI {
 		System.out.println("Enter index: ");
 		int index = Integer.parseInt(readLine());
 		Person person = null;
+		Person personToUpdate=null;
 		try {
-			person = register.getPerson(index);
+			person = register.getPerson(index-1);
+			personToUpdate = register.getPerson(index-1);
 		} catch (BadIndexException ex) {
 			System.err.println(ex.getMessage());
 			return;
@@ -262,7 +268,22 @@ public class ConsoleUI {
 
 		System.out.println("Enter Phone Number: ");
 		String phoneNumber = readLine();
+		boolean nastavenaOsoba = false;
+		try {
+			person.setName(name);
+			person.setPhoneNumber(phoneNumber);
+			nastavenaOsoba = true;
+			DatabaseRegister.updatePerson(personToUpdate, person);
 
+		} catch (WrongFormatException | ValidationException ex) {
+			System.err.println(ex);
+		} finally {
+			if (nastavenaOsoba) {
+				System.out.println("Nastavil som");
+			} else {
+				System.out.println("Nenastavil som");
+			}
+		}
 	}
 
 	/**
@@ -302,8 +323,9 @@ public class ConsoleUI {
 		case REMOVE_BY_INDEX:
 			System.out.println("Enter index: ");
 			try {
+				
 				int index = Integer.parseInt(readLine());
-				Person person = register.getPerson(index - 1);
+				Person person = register.getPerson(index-1);
 				register.removePerson(person);
 			} catch (NumberFormatException ex) {
 				System.err.println("Musis zadat len cisla.");
