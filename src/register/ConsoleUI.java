@@ -38,7 +38,8 @@ public class ConsoleUI {
 	private enum FindOption {
 		FIND_BY_NAME, FIND_BY_PHONE_NUMBER, BACK
 	}
-	private enum RemoveOption{
+
+	private enum RemoveOption {
 		REMOVE_BY_INDEX, REMOVE_ALL_BY_CHAR
 	}
 
@@ -51,7 +52,11 @@ public class ConsoleUI {
 		while (true) {
 			switch (showMenu()) {
 			case PRINT:
-				printRegister();
+				if (register instanceof DatabaseRegister) {
+					printDatabaseRegister();
+				} else {
+					printRegister();
+				}
 				break;
 			case ADD:
 				addToRegister();
@@ -144,15 +149,14 @@ public class ConsoleUI {
 
 		return RemoveOption.values()[selection - 1];
 	}
-	
+
 	/**
 	 * Prints persons in register.
 	 */
 	private void printRegister() {
 
 		int registerLength = register.getCount();
-	
-		
+
 		if (registerLength > 0)
 			System.out.println("Index Name (Phone Number)");
 		System.out.println("-----------------------------------------------");
@@ -161,13 +165,32 @@ public class ConsoleUI {
 		while (i < registerLength) {
 
 			try {
-				System.out.printf("%4d. %s%n", i+1, register.getPerson(i));
+				System.out.printf("%4d. %s%n", i + 1, register.getPerson(i));
 				i++;
 			} catch (BadIndexException e) {
 				e.printStackTrace();
 			}
 		}
 
+	}
+
+	private void printDatabaseRegister() {
+		int registerLength = register.getCount();
+
+		if (registerLength > 0)
+			System.out.println("Index Name (Phone Number)");
+		System.out.println("-----------------------------------------------");
+
+		int i = 1;
+		while (i <= registerLength) {
+
+			try {
+				System.out.printf("%4d. %s%n", i, register.getPerson(i));
+				i++;
+			} catch (BadIndexException e) {
+				e.printStackTrace();
+			}
+		}
 	}
 
 	/**
@@ -215,12 +238,31 @@ public class ConsoleUI {
 		} catch (WrongFormatException | ValidationException ex) {
 			System.err.println(ex);
 		} finally {
-			if(nastavenaOsoba) {
+			if (nastavenaOsoba) {
 				System.out.println("Nastavil som");
 			} else {
 				System.out.println("Nenastavil som");
 			}
 		}
+	}
+
+	private void updateDatabaseRegister() {
+		System.out.println("Enter index: ");
+		int index = Integer.parseInt(readLine());
+		Person person = null;
+		try {
+			person = register.getPerson(index);
+		} catch (BadIndexException ex) {
+			System.err.println(ex.getMessage());
+			return;
+		}
+
+		System.out.println("Enter Name: ");
+		String name = readLine();
+
+		System.out.println("Enter Phone Number: ");
+		String phoneNumber = readLine();
+
 	}
 
 	/**
@@ -256,8 +298,8 @@ public class ConsoleUI {
 	 * Removes person from register.
 	 */
 	private void removeFromRegister() {
-		switch(showRemoveMenu()){
-		case REMOVE_BY_INDEX: 
+		switch (showRemoveMenu()) {
+		case REMOVE_BY_INDEX:
 			System.out.println("Enter index: ");
 			try {
 				int index = Integer.parseInt(readLine());
@@ -266,24 +308,25 @@ public class ConsoleUI {
 			} catch (NumberFormatException ex) {
 				System.err.println("Musis zadat len cisla.");
 			} catch (BadIndexException e) {
-				System.err.println("Nemozem odstranit osobu: " + e.getMessage());
+				System.err
+						.println("Nemozem odstranit osobu: " + e.getMessage());
 			}
 			break;
-		case REMOVE_ALL_BY_CHAR: 
+		case REMOVE_ALL_BY_CHAR:
 			System.out.println("Enter char by which you want to remove:");
 			try {
-				char[] findBy = new char [1];
-				findBy=readLine().toCharArray();
+				char[] findBy = new char[1];
+				findBy = readLine().toCharArray();
 				register.removeAllBy(findBy[0]);
 			} catch (IndexOutOfBoundsException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			break;
-		default: break;
+		default:
+			break;
 		}
-		
-	
+
 	}
 
 }
